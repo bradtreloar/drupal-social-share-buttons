@@ -1,0 +1,79 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\node\Entity\NodeType;
+
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function social_share_buttons_entity_extra_field_info() {
+
+  $extra = [];
+  $description = t('Social Share Buttons module element');
+  foreach (NodeType::loadMultiple() as $bundle) {
+    $extra['node'][$bundle->id()]['display']['social_share_buttons'] = [
+      'label' => t('Social Share Buttons'),
+      'description' => $description,
+      'weight' => 100,
+      'visible' => TRUE,
+    ];
+  }
+
+  return $extra;
+}
+
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function social_share_buttons_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $config = \Drupal::config('social_share_buttons.settings');
+
+  $current_url = Url::fromRoute('<current>', [], ['absolute' => true])->toString();
+
+  $links = [];
+  foreach($config->get('social_share_buttons') as $platform_name => $platform_config) {
+    if ($platform_config['show']) {
+      $uri_template = $platform_config['uri'];
+      $uri = str_replace("{url}", $current_url, $uri_template);
+      $url = Url::fromUri($uri);
+
+      $links[$platform_name] = [
+        'url' => $url,
+        'title' => $platform_config['title'],
+        'icon' => $platform_config['icon'],
+        'attributes' => new Attribute([
+          'class' => [$platform_name],
+        ])
+      ];
+    }
+  }
+
+  if ($links && $build['#view_mode'] == 'full') {
+    $build['social_share_buttons'] = [
+      '#theme' => 'menu__social_share_buttons',
+      '#items' => $links,
+    ];
+  }
+}
+
+
+// /**
+//  * Implements hook_theme().
+//  * 
+//  * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme/8.5.x
+//  */
+// function social_share_buttons_theme() {
+//   return [
+//     'social_share_buttons' => [
+//       // need to pass a render element (render array)
+//       // or some variables to be used in a template or render function
+//       'render element' => 'elements',
+//       'variables' => ['links' => []],
+//     ],
+//   ];
+// }

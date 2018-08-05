@@ -1,0 +1,7 @@
+name: Social Share Buttons
+description: 'Adds HTML-only share buttons for selected popular social platforms'
+package: 'Custom'
+type: module
+core: 8.x
+
+configure: social_share_buttons.admin_form

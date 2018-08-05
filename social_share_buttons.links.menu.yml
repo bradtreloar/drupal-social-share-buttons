@@ -1,0 +1,7 @@
+
+social_share_buttons.admin:
+  title: 'Social sharing'
+  description: 'Manage social share buttons.'
+  route_name: social_share_buttons.admin
+  parent: system.admin_structure
+

@@ -1,0 +1,8 @@
+
+social_share_buttons.admin:
+  path: /admin/config/system/social_share_buttons
+  defaults:
+    _form: Drupal\social_share_buttons\Form\SettingsForm
+    _title: 'Manage social share buttons'
+  requirements:
+    _permission: administer site configuration

@@ -1,0 +1,16 @@
+
+social_share_buttons.settings:
+  type: config_object
+  label: 'Social Share Buttons settings'
+  mapping:
+    social_share_buttons:
+      type: mapping
+      mapping:
+        facebook:
+          show:
+            type: boolean
+            label: 'Show Facebook button'
+        twitter:
+          show:
+            type: boolean
+            label: 'Show Twitter button'
